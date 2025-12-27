@@ -19,7 +19,7 @@
     aiTyping.set(true);
 
     try {
-      const res = await fetch("http://localhost:4000/chat/message", {
+      const res = await fetch("${API_BASE_URL}/chat/message", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

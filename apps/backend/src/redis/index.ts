@@ -17,5 +17,4 @@ redis.on("error", (err: Error) => {
   console.error("❌ Redis error", err);
 });
 
-// IMPORTANT: connect explicitly
 await redis.connect();
