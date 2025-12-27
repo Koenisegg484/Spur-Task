@@ -31,7 +31,6 @@ export async function handleChatMessage(input: {
   if (cached) {
     messages = deserialize(cached);
   } else {
-    /** Cache miss → load from DB */
     const history = await prisma.message.findMany({
       where: { conversationId: sessionId },
       orderBy: { createdAt: "asc" },
@@ -39,13 +38,16 @@ export async function handleChatMessage(input: {
     });
 
     messages = [
-      { role: "system", content: SUPPORT_SYSTEM_PROMPT } as const,
+      {
+        role: "system",
+        content: SUPPORT_SYSTEM_PROMPT,
+      } as CachedMessage,
       ...history.map(
         (m) =>
           ({
             role: m.sender === "user" ? "user" : "assistant",
             content: m.text,
-          } as const)
+          } as CachedMessage)
       ),
     ];
   }
@@ -53,7 +55,7 @@ export async function handleChatMessage(input: {
   messages.push({
     role: "user",
     content: input.message,
-  } as const);
+  });
 
   await prisma.message.create({
     data: {
@@ -68,7 +70,7 @@ export async function handleChatMessage(input: {
   messages.push({
     role: "assistant",
     content: aiReply,
-  } as const);
+  });
 
   await prisma.message.create({
     data: {

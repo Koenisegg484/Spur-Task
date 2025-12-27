@@ -1,6 +1,6 @@
 <script lang="ts">
   import { addMessage, aiTyping, sessionId } from "$lib/store/chatStore";
-
+  import { get } from "svelte/store";
   import { v4 as uuidv4 } from "uuid";
 
   let input = "";
@@ -9,11 +9,11 @@
   async function sendMessage() {
     if (!input.trim()) return;
 
-    const id = uuidv4();
-    addMessage({ id, role: "user", content: input });
+    addMessage({ id: uuidv4(), role: "user", content: input });
 
-    const currentSession = $sessionId;
     const messageToSend = input;
+    const currentSession = get(sessionId);
+
     input = "";
     loading = true;
     aiTyping.set(true);
@@ -27,19 +27,21 @@
           sessionId: currentSession,
         }),
       });
+
       const data = await res.json();
 
       aiTyping.set(false);
       loading = false;
 
       sessionId.set(data.sessionId);
-      addMessage({ id: uuidv4(), role: "ai", content: data.reply });
+      addMessage({ id: uuidv4(), role: "assistant", content: data.reply });
     } catch (err) {
       aiTyping.set(false);
       loading = false;
+
       addMessage({
         id: uuidv4(),
-        role: "ai",
+        role: "assistant",
         content: "Oops, something went wrong!",
       });
     }

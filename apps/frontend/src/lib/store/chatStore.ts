@@ -2,7 +2,7 @@ import { writable } from "svelte/store";
 
 export type Message = {
   id: string;
-  role: "user" | "ai"; // Who sent it
+  role: "user" | "assistant"; // Who sent it
   content: string; // Text content
 };
 
