@@ -2,10 +2,11 @@ import { Router } from "express";
 import { chatMessageSchema } from "../utils/validation.js";
 import { handleChatMessage } from "../services/chat.service.js";
 import { rateLimiter } from "../config/ratelimitter.js";
+import type { Request, Response } from "express";
 
 const router = Router();
 
-router.post("/message", rateLimiter, async (req, res) => {
+router.post("/message", rateLimiter, async (req: Request, res: Response) => {
   try {
     const parsed = chatMessageSchema.safeParse(req.body);
 

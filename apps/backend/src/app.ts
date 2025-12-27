@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import chatRoutes from "./routes/chat.routes.js";
+import type { Request, Response } from "express";
 
 export function createApp() {
   const app = express();
@@ -8,7 +9,7 @@ export function createApp() {
   app.use(cors());
   app.use(express.json());
 
-  app.get("/health", (_req, res) => {
+  app.get("/health", (_req: Request, res: Response) => {
     res.json({ status: "ok" });
   });
 

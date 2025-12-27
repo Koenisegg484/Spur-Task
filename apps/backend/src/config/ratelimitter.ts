@@ -10,13 +10,12 @@ export async function rateLimiter(
   next: NextFunction
 ) {
   try {
-    // Use sessionId if available, else fallback to IP
     const identifier = req.body.sessionId ?? req.ip;
     const key = `rate:${identifier}`;
 
-    const current = await redis.incr(key); // increment counter
+    const current = await redis.incr(key);
     if (current === 1) {
-      await redis.expire(key, WINDOW_SECONDS); // set TTL on first hit
+      await redis.expire(key, WINDOW_SECONDS);
     }
 
     if (current > RATE_LIMIT) {
@@ -28,6 +27,6 @@ export async function rateLimiter(
     next();
   } catch (err) {
     console.error("Rate limiter error:", err);
-    next(); // fail-open: don’t block if Redis fails
+    next();
   }
 }
