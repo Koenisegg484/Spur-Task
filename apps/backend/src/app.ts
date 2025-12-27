@@ -6,7 +6,26 @@ import type { Request, Response } from "express";
 export function createApp() {
   const app = express();
 
-  app.use(cors());
+  const ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "https://spur-task.vercel.app",
+    "https://spur-task-q8nc4f7tf-mavihs-projects.vercel.app",
+  ];
+
+  app.use(
+    cors({
+      origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+
+        if (ALLOWED_ORIGINS.includes(origin)) {
+          return callback(null, true);
+        }
+
+        console.error("Blocked by CORS:", origin);
+        return callback(new Error("Not allowed by CORS"));
+      },
+    })
+  );
   app.use(express.json());
 
   app.get("/health", (_req: Request, res: Response) => {
