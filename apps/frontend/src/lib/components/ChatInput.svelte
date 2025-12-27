@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { API_BASE_URL } from "$lib/config";
   import { addMessage, aiTyping, sessionId } from "$lib/store/chatStore";
   import { get } from "svelte/store";
   import { v4 as uuidv4 } from "uuid";
@@ -19,7 +20,7 @@
     aiTyping.set(true);
 
     try {
-      const res = await fetch("${API_BASE_URL}/chat/message", {
+      const res = await fetch(`${API_BASE_URL}/chat/message`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
