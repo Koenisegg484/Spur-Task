@@ -11,21 +11,25 @@ export function createApp() {
     "https://spur-task.vercel.app",
     "https://spur-task-q8nc4f7tf-mavihs-projects.vercel.app",
   ];
+  const corsOptions: cors.CorsOptions = {
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
 
-  app.use(
-    cors({
-      origin: (origin, callback) => {
-        if (!origin) return callback(null, true);
+      if (ALLOWED_ORIGINS.includes(origin)) {
+        return callback(null, true);
+      }
 
-        if (ALLOWED_ORIGINS.includes(origin)) {
-          return callback(null, true);
-        }
+      console.error("❌ Blocked by CORS:", origin);
+      return callback(new Error("Not allowed by CORS"));
+    },
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  };
 
-        console.error("Blocked by CORS:", origin);
-        return callback(new Error("Not allowed by CORS"));
-      },
-    })
-  );
+  app.use(cors(corsOptions));
+
+  app.options("*", cors(corsOptions));
+
   app.use(express.json());
 
   app.get("/health", (_req: Request, res: Response) => {
