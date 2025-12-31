@@ -3,6 +3,19 @@
 <script lang="ts">
   import MessageList from "$lib/components/MessageList.svelte";
   import ChatInput from "$lib/components/ChatInput.svelte";
+
+  import { onMount } from "svelte";
+  import { addMessage } from "$lib/store/chatStore";
+  import { v4 as uuidv4 } from "uuid";
+
+  onMount(() => {
+    addMessage({
+      id: uuidv4(),
+      role: "assistant",
+      content:
+        "Hi, I’m Mira 👋\nI’m here to help you with any questions about our store - orders, returns, shipping, or support.\nHow can I assist you today?",
+    });
+  });
 </script>
 
 <main>

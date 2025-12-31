@@ -31,20 +31,17 @@
 
       const data = await res.json();
 
-      aiTyping.set(false);
-      loading = false;
-
       sessionId.set(data.sessionId);
       addMessage({ id: uuidv4(), role: "assistant", content: data.reply });
-    } catch (err) {
-      aiTyping.set(false);
-      loading = false;
-
+    } catch {
       addMessage({
         id: uuidv4(),
         role: "assistant",
         content: "Oops, something went wrong!",
       });
+    } finally {
+      aiTyping.set(false);
+      loading = false;
     }
   }
 </script>
@@ -54,36 +51,51 @@
     type="text"
     bind:value={input}
     on:keydown={(e) => e.key === "Enter" && sendMessage()}
-    placeholder="Type a message..."
+    placeholder="Type your message…"
     disabled={loading}
   />
-  <button on:click={sendMessage} disabled={loading || !input.trim()}
-    >Send</button
-  >
+
+  <button on:click={sendMessage} disabled={loading || !input.trim()}>
+    ➤
+  </button>
 </div>
 
 <style>
   .chat-input {
     display: flex;
-    margin-top: 0.5rem;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border-top: 1px solid #eee;
+    background: #fff;
   }
+
   input {
     flex: 1;
-    padding: 0.5rem;
-    border-radius: 12px 0 0 12px;
-    border: 1px solid #ccc;
+    padding: 0.7rem 1rem;
+    border-radius: 999px;
+    border: 1px solid #ddd;
     outline: none;
+    font-size: 0.95rem;
   }
+
+  input:focus {
+    border-color: #9b87f5;
+  }
+
   button {
-    padding: 0.5rem 1rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     border: none;
-    border-radius: 0 12px 12px 0;
-    background-color: #0077cc;
+    background: #9b87f5;
     color: white;
+    font-size: 1rem;
     cursor: pointer;
   }
+
   button:disabled {
-    background-color: #aaa;
+    background: #ccc;
     cursor: not-allowed;
   }
 </style>

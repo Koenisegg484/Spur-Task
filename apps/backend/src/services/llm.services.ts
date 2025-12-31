@@ -32,7 +32,7 @@ export async function generateReply(messages: LLMMessage[]): Promise<string> {
       contents,
       generationConfig: {
         temperature: 0.4,
-        maxOutputTokens: 400,
+        maxOutputTokens: 700,
       },
     });
 
