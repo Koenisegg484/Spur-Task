@@ -3,6 +3,8 @@
 Spur ChatBot is a full-stack AI-powered customer support chat application built for an e-commerce brand use case.  
 It features a modern chat UI, session-based conversations, Redis caching, PostgreSQL persistence, and pluggable LLM support.
 
+Test it live : [Spur-Task/Vercel](https://spur-task.vercel.app/)
+
 ---
 
 ## Tech Stack
